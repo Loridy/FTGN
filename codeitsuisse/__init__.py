@@ -1,6 +1,6 @@
 from flask import Flask
 app = Flask(__name__)
 import codeitsuisse.routes.square
-import codeitsuisse.routes.ticket_stream
+import codeitsuisse.routes.ticker_stream
 
 
