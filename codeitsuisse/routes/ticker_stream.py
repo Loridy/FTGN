@@ -3,13 +3,14 @@ import json
 
 from flask import request, jsonify
 from decimal import Decimal
+
 from codeitsuisse import app
+
 
 logger = logging.getLogger(__name__)
 
-@app.route("/tickerStreamPart1", methods=["POST"])
+@app.route('/tickerStreamPart1', methods=['POST'])
 def tickerStreamPart1():
-
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     # a list of "timestamp,ticker,quantity,price"
@@ -23,7 +24,7 @@ def tickerStreamPart1():
     for ticker in new_data:
         key = ticker[0]
         if key in tickers:
-            check(ticker[1:], tickers[key])
+            check1(ticker[1:], tickers[key])
             tickers[key].sort(key=lambda x: x[0])
         else:
             if len(tickers) == 0:
@@ -33,7 +34,7 @@ def tickerStreamPart1():
                 tickers[key] = []
                 for li in tickers[previous][:]:
                     tickers[key].append(li[:])
-                check(ticker[1:], tickers[key])
+                check1(ticker[1:], tickers[key])
             previous = key
     output = []
     for key in tickers:
@@ -42,12 +43,13 @@ def tickerStreamPart1():
         for item in tickers[key]:
             list += [str(_) for _ in item]
         output.append(",".join(list))
-    return json.dumps(output)
+    logging.info("data sent for evaluation {}".format(output))
+    return json.dumps({"output": output})
 
 def get_time(time):
     return int(time.split(":")[0])*60+int(time.split(":")[1])
 
-def check(ticker, exist):
+def check1(ticker, exist):
     # adding ticker to exist list
     for ele in exist:
         if ticker[0] == ele[0]:
@@ -55,7 +57,7 @@ def check(ticker, exist):
             return
     exist.append(ticker)
 
-@app.route("/tickerStreamPart2", methods=["POST"])
+@app.route('/tickerStreamPart2', methods=['POST'])
 def tickerStreamPart2():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
@@ -76,7 +78,7 @@ def tickerStreamPart2():
         key = ticker[0]
         out = [":".join(str(_).zfill(2) for _ in [key//60, key%60])]
         if key in tickers:
-            check(ticker[1:], tickers[key], quantityBlock, out, ans)
+            check2(ticker[1:], tickers[key], quantityBlock, out, ans)
             tickers[key].sort(key=lambda x: x[0])
         else:
             if len(tickers) == 0:
@@ -87,16 +89,13 @@ def tickerStreamPart2():
                 for li in tickers[previous][:]:
                     tickers[key].append(li[:])
                 
-                check(ticker[1:], tickers[key], quantityBlock, out, ans)                  
+                check2(ticker[1:], tickers[key], quantityBlock, out, ans)                  
             previous = key
         if len(out) != 1:
             output.append(",".join([str(_) for _ in out]))
-    return json.dumps(output)
+    return json.dumps({"output": output})
 
-def get_time(time):
-    return int(time.split(":")[0])*60+int(time.split(":")[1])
-
-def check(ticker, exist, quantityBlock, out, ans):
+def check2(ticker, exist, quantityBlock, out, ans):
     # adding ticker to exist list
     for ele in exist:
         if ticker[0] == ele[0]:
