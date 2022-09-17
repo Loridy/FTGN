@@ -14,7 +14,6 @@ def travelling():
     # data = json.loads(data)
     print(format(data))
     prodata = data.split("\n")[:-1]
-    print(type(prodata[0]))
     for i in range(len(prodata)):
         prodata[i] = prodata[i].replace("\x00", ' ')
         print(prodata[i])
