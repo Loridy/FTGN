@@ -1,7 +1,7 @@
 import logging
 import json
 
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from codeitsuisse import app
 
@@ -11,44 +11,37 @@ logger = logging.getLogger(__name__)
 def cryptocollapz():
     data = request.get_json()
     #得到一个list
-    result=process(data)
+    result=process(data[0])
     logging.info("data sent for evaluation {}".format(data))
     logging.info("My result :{}".format(result))
-    return json.dumps(result)
-
+    l = []
+    l.append(result)
+    # return json.dumps(l)
+    return Response(json.dumps(l), mimetype='application/json')
 
 def process(data):
-    dp=[0 for i in range(1000000)]
-    result=[]
-    for li in data:
-        lineresult=[]
-        for lii in li:
-            if (dp[lii]!=0):
-                lineresult.append(dp[lii])
-            else:
-                lineresult.append(calc(lii,dp))
-        result.append(lineresult)
 
-    # print (result)
-    return result
+    dic = {}
+    for i in range(len(data)):
+        dic[i] = []
+        dic[i].append(data[i])
+    n = []
+    for i in dic:
+        n.append(cal(dic[i]))
+    return n
 
-
-def calc(ii,dp):
-    i=ii+1
-    i=i-1
-    mp=set()
-
-    while (i not in mp):
-        if (i < 1000000):
-            if (dp[i] != 0):
-                mp.add(dp[i])
-                break;
-        mp.add(i)
-
-        if (i%2==1):
-            i=3*i+1
+def cal(list):
+    p = list[0]
+    m=list[0]
+    if p%2==0:
+        p //= 2
+    else:
+        p = p *3 +1
+    while p not in list:
+        list.append(p)
+        if p%2==0:
+            p //= 2
         else:
-            i=i/2
-            i=int(i)
-    dp[ii]=int(max(mp))
-    return dp[ii]
+            p = p *3 +1
+        m=max(list)
+    return m
