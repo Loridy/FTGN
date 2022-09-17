@@ -1,7 +1,7 @@
 import logging
 import json
 
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from codeitsuisse import app
 
@@ -16,8 +16,8 @@ def cryptocollapz():
     logging.info("My result :{}".format(result))
     l = []
     l.append(result)
-    return json.dumps(l)
-
+    # return json.dumps(l)
+    return Response(json.dumps(l), mimetype='application/json')
 
 def process(data):
 
