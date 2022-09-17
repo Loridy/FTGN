@@ -10,17 +10,18 @@ logger = logging.getLogger(__name__)
 headers = {'Content-type': 'text/plain'}
 @app.route('/travelling-suisse-robot', methods=['POST'] )
 def travelling():
-    data = request.get_json()
-    logging.info("data sent for evaluation {}".format(data))
+    data = request.get_data(as_text=True)
+    # data = json.loads(data)
+    print(format(data))
     prodata = data.split("\n")
+    print(prodata)
     l = len(prodata)-1
     w = len(prodata[0])
-
+    print(l, w)
     charList = [[] for i in range(26)]
     for m in range(l):
         for n in range(w):
             if prodata[m][n] != " ":
-                print(prodata[m][n])
                 charList[ord(prodata[m][n]) - 65].append([m, n])
     orig = charList[ord("X") - 65][0]
     goal = "CODEITSUISSE"
@@ -30,8 +31,6 @@ def travelling():
     for i in goal:
         pos_point = charList[ord(i) - 65]
         min = 0
-        print(orig,"to",pos_point, i)
-        # minsum = abs(pos_point[0][0] - orig[0]) + abs(pos_point[0][1] - orig[1])
         if len(pos_point)== 1:
             x_d = pos_point[0][0] - orig[0]
             y_d = pos_point[0][1] - orig[1]
@@ -157,7 +156,6 @@ def travelling():
             ppath.append(s+"P")
         if len(status) == 2:
             del status[0]
-        print(status)
         min = pos_point.index(target)
         del (pos_point[min])
     str1 = ""
