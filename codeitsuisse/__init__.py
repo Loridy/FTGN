@@ -5,3 +5,4 @@ import codeitsuisse.routes.ticker_stream
 import codeitsuisse.routes.calendar
 
 import codeitsuisse.routes.cryptocollapz
+import codeitsuisse.routes.magiccauldrons
