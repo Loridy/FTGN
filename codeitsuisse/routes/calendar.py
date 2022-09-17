@@ -31,6 +31,7 @@ def calendar():
     print(date)
     for day in date:
         if day[1] in months:
+            print(datetime(day[0], day[1], day[2]).weekday())
             if datetime(day[0], day[1], day[2]).weekday() not in months[day[1]]:
                 months[day[1]].append(datetime(day[0], day[1], day[2]).weekday())
         else:
