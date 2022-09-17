@@ -68,6 +68,8 @@ def travelling():
                 if y_d < 0:
                     s+="L"+"S"*abs(y_d)
                     s+="L"+"S"*abs(x_d)
+                else:
+                    s+="RR"+"S"*abs(x_d)
                 status.append("down")
             else:
                 if y_d > 0:
@@ -94,6 +96,8 @@ def travelling():
                 if x_d < 0:
                     s+="L"+"S"*abs(x_d)
                     s+="L"+"S"*abs(y_d)
+                else:
+                    s+="RR"+"S"*abs(y_d)
                 status.append("left")
             else:
                 if x_d > 0:
@@ -120,6 +124,8 @@ def travelling():
                 if y_d < 0:
                     s+="R"+"S"*abs(y_d)
                     s+="R"+"S"*abs(x_d)
+                else:
+                    s+="RR"+"S"*abs(x_d)
                 status.append("up")
             else:
                 if y_d > 0:
@@ -146,6 +152,8 @@ def travelling():
                 if x_d > 0:
                     s+="L"+"S"*abs(x_d)
                     s+="L"+"S"*abs(y_d)
+                else:
+                    s+="RR"+"S"*abs(y_d)
                 status.append("right")
             else:
                 if x_d < 0:
@@ -165,5 +173,3 @@ def travelling():
         str1 += i
     logging.info("My result :{}".format(str1))
     return json.dumps(str1)
-
-# input = 'E\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00OX\x00\x00T\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00D\n\x00\x00\x00\x00\x00I\x00\x00\x00C\n\x00\x00\x00E\x00\x00\x00\x00\x00\x00\n\x00\x00SS\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00I\x00\x00\x00\n\x00\x00\x00\x00\x00S\x00\x00\x00U\n'
