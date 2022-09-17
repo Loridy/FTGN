@@ -4,6 +4,7 @@ import json
 from flask import request, jsonify
 from datetime import datetime
 from collections import OrderedDict
+from multiprocessing import current_process
 from tabnanny import check
 
 from codeitsuisse import app
@@ -16,8 +17,8 @@ def calendar():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     stream = data.get("numbers")
-    res= {}
     input = stream[:]
+    res= {}
     year = input[0]
     date=[]
     months = {}
@@ -26,13 +27,17 @@ def calendar():
             date.append(convert(year, day))
         elif year%4!=0 and 366>day>0 and convert(year, day) not in date:
             date.append(convert(year, day))
+    date.sort()
+    print(date)
     for day in date:
-        if day[1] in months and datetime(day[0], day[1], day[2]).weekday() not in months:
-            months[day[1]].append(datetime(day[0], day[1], day[2]).weekday())
+        if day[1] in months:
+            if datetime(day[0], day[1], day[2]).weekday() not in months[day[1]]:
+                months[day[1]].append(datetime(day[0], day[1], day[2]).weekday())
         else:
             months[day[1]] = []
             months[day[1]].append(datetime(day[0], day[1], day[2]).weekday())
         months[day[1]].sort()
+    print(months,"months")
     part1 = []
     for month in range(1, 13):
         status = ""
@@ -51,23 +56,27 @@ def calendar():
         else:
             for day in months[month]:
                 li[day] = check_date(day)
-                part1.append("".join(li))
-    initial = "".join(part1)
-    part_2 = part2(initial.find(" ")%7+2001, part1)
+            part1.append("".join(li))
+    print(part1)
 
-    print(part1, part_2)
     p1 = ",".join(part1)+","
-    res["part1"] = p1
-    res["part2"] = func(p1)
-    return jsonify(res)
+    # res["part2"] = func(p1)
+    p2 = p1[:-1].split(",")
+    # e = enumerate(p2)
+    # map(func, p1)
+    # print(p1, list(map(func, )))
+    # return jsonify(res)
     # "part2":func(p1)
-    # return json.dumps({"part1": p1, "part2":p1})
+    return json.dumps({"part1": p1, "part2":[]})
 
-
-
-def func(input):
-    part1 = input[:-1].split(",")
-    return part2("".join(part1).find(" ")%7+2001, part1)
+# def func(data):
+#     # month, par1 = data
+#     print(month)
+#     print(par1)
+#     part1 = par1
+#     print(part1)
+#     # return part2("".join(part1).find(" ")%7+2001, part1)
+#     return "hello"
 
 def convert(year, number):
     months = {}
@@ -81,30 +90,47 @@ def convert(year, number):
                 months[2] = 29
             else:
                 months[2] = 28
-    start = 1
-    while number > months[start]:
-        number -= months[start]
-        start += 1
-    return [year, start, number]
+    current_month = 1
+    while number > months[current_month]:
+        number -= months[current_month]
+        current_month += 1
+    return [year, current_month, number]
 
-def part2(year, part1):
-    months = {}
-    for i in range(len(part1)):
-        if part1[i] == "alldays":
-            months[i+1] = [0,1,2,3,4,5,6]
-        elif part1[i] == "weekday":
-            months[i+1] = [0]
-        elif part1[i] == "weekend":
-            months[i+1] = [5]
-        elif part1[i] != "       ":
-            for j in range(7):
-                months[i+1] = []
-                if part1[i][j] != " ":
-                    months[i+1].append([j])
-    result = [year]
-    for month in months:
-        result += get_month(year, month, months[month])
-    return result
+# def part2(year, part1):
+#     months = {}
+#     print(part1)
+#     print(len(part1),"1")
+#     # for i in range(len(part1)):
+#     #     print(i)
+#     #     if part1[i] == "alldays":
+#     #         months[i+1] = [0,1,2,3,4,5,6]
+#     #     elif part1[i] == "weekday":
+#     #         months[i+1] = [0]
+#     #     elif part1[i] == "weekend":
+#     #         print("hi")
+#     #         months[i+1] = [5]
+#     #     elif part1[i] != "       ":
+#     #         for j in range(7):
+#     #             months[i+1] = []
+#     #             if part1[i][j] != " ":
+#     #                 months[i+1].append([j])
+#     if part1[i] == "alldays":
+#         months[i+1] = [0,1,2,3,4,5,6]
+#     elif part1[i] == "weekday":
+#         months[i+1] = [0]
+#     elif part1[i] == "weekend":
+#         print("hi")
+#         months[i+1] = [5]
+#     elif part1[i] != "       ":
+#         for j in range(7):
+#             months[i+1] = []
+#             if part1[i][j] != " ":
+#                 months[i+1].append([j])
+    
+#     result = [year]
+#     for month in months:
+#         result += get_month(year, month, months[month])
+#     return result
 
 def check_date(day):
     if day==0: return 'm'
@@ -144,5 +170,6 @@ def get_month(year, month, day):
             list.append(sum)
 
 
-input = [2022, 1, 1, 0, 366]
-calendar
+# input = [2022, -1, 0, 1, 2, 60, 38, 40, 39,71, 42, 41, 91, 334, 444, 999]
+# print(sorted(input))
+# calendar(input)
