@@ -47,10 +47,12 @@ def calendar():
         elif len(months[month]) == 7: 
             li = "alldays"
             part1.append(li)
-        elif all(ele in [0,1,2,3,4] for ele in months[month]):
+        # elif all(ele in [0,1,2,3,4] for ele in months[month]):
+        elif months[month].sort() == [0, 1, 2, 3, 4]:
             li = "weekday"
             part1.append(li)
-        elif all(ele in [5,6] for ele in months[month]):
+        # elif all(ele in [5,6] for ele in months[month]):
+        elif months[month].sort() == [5,6]:
             li = "weekend"
             part1.append(li)
         else:
