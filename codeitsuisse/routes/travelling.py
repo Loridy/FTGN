@@ -13,12 +13,17 @@ def travelling():
     data = request.get_data(as_text=True)
     # data = json.loads(data)
     print(format(data))
-    prodata = data.split("\n")
+    prodata = data.split("\n")[:-1]
+    print(type(prodata[0]))
+    for i in range(len(prodata)):
+        prodata[i] = prodata[i].replace("\x00", ' ')
+        print(prodata[i])
     print(prodata)
-    l = len(prodata)-1
+    l = len(prodata)
     w = len(prodata[0])
     print(l, w)
     charList = [[] for i in range(26)]
+    print(prodata[9][9])
     for m in range(l):
         for n in range(w):
             if prodata[m][n] != " ":
@@ -162,5 +167,7 @@ def travelling():
     for i in ppath:
         str1 += i
     logging.info("My result :{}".format(str1))
-
     return json.dumps(str1)
+
+input = 'E\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n\x00\x00OX\x00\x00T\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00D\n\x00\x00\x00\x00\x00I\x00\x00\x00C\n\x00\x00\x00E\x00\x00\x00\x00\x00\x00\n\x00\x00SS\x00\x00\x00\x00\x00\x00\n\x00\x00\x00\x00\x00\x00I\x00\x00\x00\n\x00\x00\x00\x00\x00S\x00\x00\x00U\n'
+travelling(input)
