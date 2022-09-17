@@ -31,7 +31,6 @@ def calendar():
     print(date)
     for day in date:
         if day[1] in months:
-            print(day, ":", datetime(day[0], day[1], day[2]).weekday())
             if datetime(day[0], day[1], day[2]).weekday() not in months[day[1]]:
                 months[day[1]].append(datetime(day[0], day[1], day[2]).weekday())
         else:
@@ -53,7 +52,7 @@ def calendar():
             li = "weekday"
             part1.append(li)
         # elif all(ele in [5,6] for ele in months[month]):
-        elif months[month].sort() == [5,6],sort():
+        elif months[month].sort() == [5,6].sort():
             li = "weekend"
             part1.append(li)
         else:
