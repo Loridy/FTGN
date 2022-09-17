@@ -31,6 +31,7 @@ def travelling():
     for i in goal:
         pos_point = charList[ord(i) - 65]
         min = 0
+        print(orig,"to",i, pos_point)
         if len(pos_point)== 1:
             x_d = pos_point[0][0] - orig[0]
             y_d = pos_point[0][1] - orig[1]
@@ -156,6 +157,7 @@ def travelling():
             ppath.append(s+"P")
         if len(status) == 2:
             del status[0]
+        print(status[0])
         min = pos_point.index(target)
         del (pos_point[min])
     str1 = ""
