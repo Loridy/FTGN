@@ -14,7 +14,9 @@ def cryptocollapz():
     result=process(data[0])
     logging.info("data sent for evaluation {}".format(data))
     logging.info("My result :{}".format(result))
-    return json.dumps(list(result))
+    l = []
+    l.append(result)
+    return json.dumps(l)
 
 
 def process(data):
