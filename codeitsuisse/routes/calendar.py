@@ -1,11 +1,10 @@
-from datetime import datetime
-from collections import OrderedDict
-from tabnanny import check
 import logging
 import json
 
 from flask import request, jsonify
-from decimal import Decimal
+from datetime import datetime
+from collections import OrderedDict
+from tabnanny import check
 
 from codeitsuisse import app
 
@@ -13,11 +12,11 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/calendarDays', methods=['POST'])
-def calender():
+def calendar():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     stream = data.get("numbers")
-
+    res= {}
     input = stream[:]
     year = input[0]
     date=[]
@@ -54,13 +53,21 @@ def calender():
                 li[day] = check_date(day)
                 part1.append("".join(li))
     initial = "".join(part1)
-    for i in range(len(initial)):
-        if initial[i] == " ":
-            part_2 = part2(i%7+2001, part1)
-            break
+    part_2 = part2(initial.find(" ")%7+2001, part1)
+
     print(part1, part_2)
-    p1 = ",".join(part1)
-    return json.dumps({"part1": p1, "part2":part_2})
+    p1 = ",".join(part1)+","
+    res["part1"] = p1
+    res["part2"] = func(p1)
+    return jsonify(res)
+    # "part2":func(p1)
+    # return json.dumps({"part1": p1, "part2":p1})
+
+
+
+def func(input):
+    part1 = input[:-1].split(",")
+    return part2("".join(part1).find(" ")%7+2001, part1)
 
 def convert(year, number):
     months = {}
@@ -94,7 +101,7 @@ def part2(year, part1):
                 months[i+1] = []
                 if part1[i][j] != " ":
                     months[i+1].append([j])
-    result = []
+    result = [year]
     for month in months:
         result += get_month(year, month, months[month])
     return result
@@ -137,5 +144,5 @@ def get_month(year, month, day):
             list.append(sum)
 
 
-# input = [2022, 1, 1, 0, 366]
-# calender(input)
+input = [2022, 1, 1, 0, 366]
+calendar
