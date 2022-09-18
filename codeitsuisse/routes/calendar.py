@@ -47,12 +47,10 @@ def calendar():
         elif len(months[month]) == 7: 
             li = "alldays"
             part1.append(li)
-        # elif all(ele in [0,1,2,3,4] for ele in months[month]):
-        elif months[month].sort() == [0, 1, 2, 3, 4].sort():
+        elif cmr(months[month], [0,1,2,3,4]):
             li = "weekday"
             part1.append(li)
-        # elif all(ele in [5,6] for ele in months[month]):
-        elif months[month].sort() == [5,6].sort():
+        elif cmr(months[month], [5,6]):
             li = "weekend"
             part1.append(li)
         else:
@@ -70,6 +68,11 @@ def calendar():
     # return jsonify(res)
     # "part2":func(p1)
     return json.dumps({"part1": p1, "part2":[]})
+
+def cmr(l1,l2):
+    l1.sort()
+    l2.sort()
+    return l1==l2
 
 # def func(data):
 #     # month, par1 = data
